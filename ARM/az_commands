@@ -1,0 +1,9 @@
+# Validate ARM Template Syntax
+az deployment group validate --resource-group <your-resource-group> --template-file <your-template.json>
+
+# Preview ARM deployment
+az deployment group what-if --resource-group <your-resource-group> --template-file <your-template.json>
+
+az deployment sub what-if --location <location> --template-file <your-template.json>
+
+az deployment mg what-if --management-group-id <your-mg-id> --template-file <your-template.json>

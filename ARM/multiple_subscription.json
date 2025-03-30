@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "subscriptions": {
+        "type": "array",
+        "defaultValue": [
+          { "subscriptionId": "sub-id-1", "storageAccountName": "storage1" },
+          { "subscriptionId": "sub-id-2", "storageAccountName": "storage2" }
+        ]
+      }
+    },
+    "resources": [
+      {
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2022-09-01",
+        "name": "[concat('deployment-', parameters('subscriptions')[copyIndex()].subscriptionId)]",
+        "subscriptionId": "[parameters('subscriptions')[copyIndex()].subscriptionId]",
+        "copy": {
+          "name": "subscriptionDeployments",
+          "count": "[length(parameters('subscriptions'))]"
+        },
+        "properties": {
+          "mode": "Incremental",
+          "template": {
+            "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+            "contentVersion": "1.0.0.0",
+            "parameters": {
+              "storageAccountName": { "type": "string" }
+            },
+            "resources": [
+              {
+                "type": "Microsoft.Storage/storageAccounts",
+                "apiVersion": "2022-09-01",
+                "name": "[parameters('storageAccountName')]",
+                "location": "East US",
+                "sku": { "name": "Standard_LRS" },
+                "kind": "StorageV2",
+                "properties": {}
+              }
+            ]
+          },
+          "parameters": {
+            "storageAccountName": {
+              "value": "[parameters('subscriptions')[copyIndex()].storageAccountName]"
+            }
+          }
+        }
+      }
+    ]
+  }  
