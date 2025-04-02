@@ -18,7 +18,7 @@
     },
     "skuName": {
       "type": "string",
-      "defaultValue": "Standard_LRS",
+      //"defaultValue": "Standard_LRS",
       "metadata": {
         "description": "The SKU for the storage account."
       }
