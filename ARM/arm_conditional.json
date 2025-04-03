@@ -1,0 +1,34 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageExists": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Set to true if the storage account already exists."
+      }
+    },
+    "storageAccountName": {
+      "type": "string",
+      "defaultValue": "mystorageaccount"
+    },
+    "containerName": {
+      "type": "string",
+      "defaultValue": "mycontainer"
+    },
+    "blobName": {
+      "type": "string",
+      "defaultValue": "myblob.txt"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2021-04-01",
+      "name": "[format('{0}/default/{1}', parameters('storageAccountName'), parameters('containerName'))]",
+      "properties": {},
+      "condition": "[parameters('storageExists')]"
+    }
+  ]
+}

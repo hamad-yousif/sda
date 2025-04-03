@@ -1,0 +1,76 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "sourceSubscriptionId": {
+      "type": "string",
+      "defaultValue": "SUBSCRIPTION-1",
+      "metadata": {
+        "description": "Subscription ID containing the source VNet"
+      }
+    },
+    "sourceResourceGroup": {
+      "type": "string",
+      "defaultValue": "RG-WITH-VNET1",
+      "metadata": {
+        "description": "Resource group containing the source VNet"
+      }
+    },
+    "sourceVNetName": {
+      "type": "string",
+      "defaultValue": "vnet1",
+      "metadata": {
+        "description": "Name of the source VNet"
+      }
+    },
+    "targetSubscriptionId": {
+      "type": "string",
+      "defaultValue": "SUBSCRIPTION-2",
+      "metadata": {
+        "description": "Subscription ID containing the target VNet"
+      }
+    },
+    "targetResourceGroup": {
+      "type": "string",
+      "defaultValue": "RG-WITH-VNET2",
+      "metadata": {
+        "description": "Resource group containing the target VNet"
+      }
+    },
+    "targetVNetName": {
+      "type": "string",
+      "defaultValue": "vnet2",
+      "metadata": {
+        "description": "Name of the target VNet"
+      }
+    }
+  },
+  "variables": {
+    "peeringName": "[concat(parameters('sourceVNetName'), '/peer-to-', parameters('targetVNetName'))]",
+    "targetVNetId": "[concat('/subscriptions/', parameters('targetSubscriptionId'), '/resourceGroups/', parameters('targetResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/', parameters('targetVNetName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+      "apiVersion": "2023-05-01",
+      "name": "[variables('peeringName')]",
+      "subscriptionId": "[parameters('sourceSubscriptionId')]",
+      "resourceGroup": "[parameters('sourceResourceGroup')]",
+      "properties": {
+        "allowVirtualNetworkAccess": true,
+        "allowForwardedTraffic": false,
+        "allowGatewayTransit": false,
+        "useRemoteGateways": false,
+        "remoteVirtualNetwork": {
+          "id": "[variables('targetVNetId')]"
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "peeringStatus": {
+      "type": "string",
+      "value": "[reference(resourceId(parameters('sourceSubscriptionId'), parameters('sourceResourceGroup'), 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings', parameters('sourceVNetName'), concat('peer-to-', parameters('targetVNetName'))).provisioningState]"
+    }
+  }
+}
