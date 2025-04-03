@@ -1,57 +1,43 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "storageAccountName": {
-        "type": "string",
-        "defaultValue": "[format('store{0}', uniqueString(resourceGroup().id))]"
-      },
-      "location": {
-        "type": "string",
-        "defaultValue": "[resourceGroup().location]"
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing Storage Account"
       }
     },
-    "resources": [
-      {
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2022-09-01",
-        "name": "nestedTemplateDeployment",
-        "properties": {
-          "mode": "Incremental",
-          "template": {
-            "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-            "contentVersion": "1.0.0.0",
-            "parameters": {
-              "storageAccountName": {
-                "type": "string"
-              },
-              "location": {
-                "type": "string"
+    "containerName": {
+      "type": "string",
+      "defaultValue": "myblobcontainer",
+      "metadata": {
+        "description": "Name of the Blob Container to create"
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "createBlobContainer",
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "resources": [
+            {
+              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+              "apiVersion": "2023-01-01",
+              "name": "[concat(parameters('storageAccountName'), '/default/', parameters('containerName'))]",
+              "properties": {
+                "publicAccess": "None"
               }
-            },
-            "resources": [
-              {
-                "type": "Microsoft.Storage/storageAccounts",
-                "apiVersion": "2022-09-01",
-                "name": "[parameters('storageAccountName')]",
-                "location": "[parameters('location')]",
-                "sku": {
-                  "name": "Standard_LRS"
-                },
-                "kind": "StorageV2",
-                "properties": {}
-              }
-            ]
-          },
-          "parameters": {
-            "storageAccountName": {
-              "value": "[parameters('storageAccountName')]"
-            },
-            "location": {
-              "value": "[parameters('location')]"
             }
-          }
+          ]
         }
       }
-    ]
-  }  
+    }
+  ]
+}
