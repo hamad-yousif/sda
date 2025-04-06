@@ -1,10 +1,11 @@
+// This template will need a parameter.json file (already exists in this repo)
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "storageAccountName": {
       "type": "string",
-      //"defaultValue": "hajhamadstorageaccount",
+      //"defaultValue": "hamadstorageaccount",
       "metadata": {
         "description": "The name of the storage account."
       }

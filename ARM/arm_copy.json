@@ -1,3 +1,5 @@
+// This template demonstrates the usage of copy to iterate over resources
+// It creates 3 storage accounts
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
@@ -11,7 +13,7 @@
       {
         "type": "Microsoft.Storage/storageAccounts",
         "apiVersion": "2023-01-01",
-        "name": "[concat('storage', copyIndex(1))]",
+        "name": "[concat('storage', copyIndex())]",
         "location": "[resourceGroup().location]",
         "sku": { "name": "Standard_LRS" },
         "kind": "StorageV2",

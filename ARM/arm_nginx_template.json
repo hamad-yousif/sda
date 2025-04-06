@@ -1,3 +1,5 @@
+// This template shows how ARM template can be used to deploy applications
+// It builds an nginx webserver
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",

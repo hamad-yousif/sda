@@ -1,3 +1,6 @@
+// This template shows how nested templates work
+// The parent template of a storage account invokes
+// a child template to create a blob container within the storage account 
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
