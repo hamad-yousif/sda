@@ -8,7 +8,7 @@
     {
         "type": "Microsoft.Storage/storageAccounts",
         "apiVersion": "2021-09-01",
-        "name": "hamadstorageaccount",
+        "name": "hamadstorage123",
         "location": "eastus",
         "sku": {
             "name": "Standard_LRS"
